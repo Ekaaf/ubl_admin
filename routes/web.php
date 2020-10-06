@@ -63,7 +63,7 @@ Route::group(array('prefix' => 'admin','middleware' => 'admin'), function()
     Route::get('/getDoctors', array('as' => 'getDoctors', 'uses' => 'AdminController@getDoctors'));
     Route::get('/doctor/{id}/edit', array('as' => 'doctorsedit', 'uses' => 'AdminController@doctorsedit'));
     Route::post('/doctors/updatedoctor', array('as' => 'updatedoctor', 'uses' => 'AdminController@updatedoctor'));
-    Route::get('/doctors/delete/{id}', array('as' => 'deletedoctors', 'uses' => 'AdminController@deletedoctors'));
+    Route::get('/doctor/delete/{id}', array('as' => 'deletedoctors', 'uses' => 'AdminController@deletedoctor'));
 
 	Route::post('/user/updateuser', array('as' => 'updateuser', 'uses' => 'AdminController@updateuser'));
 

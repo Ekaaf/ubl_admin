@@ -1358,6 +1358,7 @@ class AdminController extends Controller
         $user->email = $request->input('email');
         $user->phone_number = $request->input('phone_number');
         $user->password = Hash::make($request->input('password'));
+        $user->role_id = 2;
         $user->save();
 
 
@@ -1380,6 +1381,7 @@ class AdminController extends Controller
         $doctor->education = $request->input('education');
         $doctor->location = $request->input('location');
         $doctor->imagelink = $imageUrl;
+
         $doctor->online_consultation = $request->input('online_consultation');
         $doctor->save();
         return redirect('admin/doctor/index');
@@ -1418,7 +1420,7 @@ class AdminController extends Controller
     }
 
 
-    public function deletedoctors($id){
+    public function deletedoctor($id){
         $doctor = Doctor::where('id',$id)->delete();
     }
 

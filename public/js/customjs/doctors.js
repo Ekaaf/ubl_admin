@@ -81,10 +81,10 @@ function deleteDoctors(id){
     if (r == true) {
         $.ajax({
             type: 'get',
-            url: '../admin/doctors/delete/'+id,
-            data: {
-              id : id
-            },
+            url: './delete/'+id,
+            // data: {
+            //   id : id
+            // },
             dataType: 'text',
         })
         .done(function (data) {
