@@ -247,13 +247,13 @@ class AdminController extends Controller
         else{
             $sql_details = array(
 
-                'user' => 'dcptrack_unileve',
+                'user' => 'sensetiv',
 
-                'pass' => 'r5hEYz!rDVOH',
+                'pass' => '3Bk5Imo*0Y0)iD',
 
-                'db'   => 'dcptrack_unilever',
+                'db'   => 'sensetiv_ubl',
 
-                'host' => 'dcptracker.com'
+                'host' => 'ubl.sensetiveexpert.com'
 
             );
         }
