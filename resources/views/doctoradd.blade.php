@@ -6,7 +6,7 @@
 		<div class="d-flex align-items-center">
 			<div class="mr-auto">
 				<h3 class="m-subheader__title ">
-					Edit Audit
+					Add Doctor
 				</h3>
 			</div>
 		</div>
@@ -19,7 +19,7 @@
 				@csrf
 				<div class="form-group m-form__group row">
 					<label class="col-lg-2 col-form-label">
-						Username:
+						Name:
 					</label>
 					<div class="col-lg-6">
 						<input type="text" class="form-control m-input" name="name" id="name"  required>
@@ -62,22 +62,13 @@
 					</div>
 				</div>
 
-				<div class="form-group m-form__group row">
-					<label class="col-lg-2 col-form-label">
-						Doctor Name:
-					</label>
-					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="doctor_name" id="doctor_name"  required>
-					</div>
-				</div>
-
 					
 				<div class="form-group m-form__group row">
 					<label class="col-lg-2 col-form-label">
 						Designation:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="designation" id="designation"  required>
+						<input type="text" class="form-control m-input" name="designation" id="designation" >
 					</div>
 				</div>
 
@@ -100,7 +91,7 @@
 						Specialization:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="specialization" id="specialization"  required>
+						<input type="text" class="form-control m-input" name="specialization" id="specialization" >
 					</div>
 				</div>
 
@@ -109,7 +100,7 @@
 						Chamber Name:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="chamber_name" id="chamber_name"  required>
+						<input type="text" class="form-control m-input" name="chamber_name" id="chamber_name"  required="">
 					</div>
 				</div>
 
@@ -118,7 +109,7 @@
 						Chamber Address:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="chamber_address" id="chamber_address"  required>
+						<input type="text" class="form-control m-input" name="chamber_address" id="chamber_address"  required="">
 					</div>
 				</div>
 
@@ -127,7 +118,7 @@
 						Education:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="education" id="education"  required>
+						<input type="text" class="form-control m-input" name="education" id="education"  required="">
 					</div>
 				</div>
 
@@ -136,7 +127,7 @@
 						BMDC Reg No:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="bmdc_number" id="bmdc_number"  required>
+						<input type="text" class="form-control m-input" name="bmdc_number" id="bmdc_number"  required="">
 					</div>
 				</div>
 				
@@ -147,10 +138,18 @@
 						Online Consultation:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="online_consultation" id="online_consultation" required>
+						<input type="text" class="form-control m-input" name="online_consultation" id="online_consultation" >
 					</div>
 				</div>
-			
+			    
+			    <div class="form-group m-form__group row">
+					<label class="col-lg-2 col-form-label">
+						Long - lat:
+					</label>
+					<div class="col-lg-6">
+						<input type="text" class="form-control m-input" name="location" id="location" value="">
+					</div>
+				</div>
 					
 				<div class="form-group m-form__group row">
 					<label class="col-lg-2 col-form-label">

@@ -13,8 +13,18 @@
 		</div>
 	</div>
 	<!-- END: Subheader -->
-	<div class="m-content">
-		Dashboard
+	<div class="m-content" style="font-size: 17px;">
+		<div class="row">
+			Total visitor counter : <b>{{$counter[0]->counter}}</b> 
+		</div>
+
+		<div class="row">
+			Total enrolled doctor : <b>{{$doctors}}</b> 
+		</div>
+
+		<div class="row">
+			Total Sample collected : <b>{{$sampleno}}</b> 
+		</div>
 	</div>
 </div>
 @stop

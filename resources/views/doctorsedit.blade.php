@@ -34,16 +34,22 @@
 						Designation:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="designation" id="designation" value="{{$doctor->designation}}" required>
+						<input type="text" class="form-control m-input" name="designation" id="designation" value="{{$doctor->designation}}">
 					</div>
 				</div>
+
 
 				<div class="form-group m-form__group row">
 					<label class="col-lg-2 col-form-label">
 						Department:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="department" id="department" value="{{$doctor->department}}" required>
+						<select class="form-control m-input" name="department" id="department">
+							<option value="">Select</option>
+							@foreach($departments as $dept)
+							<option value="{{$dept}}" <?php if($doctor->department==$dept) echo "selected"; ?>>{{$dept}}</option>
+							@endforeach
+						</select>
 					</div>
 				</div>
 
@@ -52,7 +58,7 @@
 						Specialization:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="specialization" id="specialization" value="{{$doctor->specialization}}" required>
+						<input type="text" class="form-control m-input" name="specialization" id="specialization" value="{{$doctor->specialization}}" >
 					</div>
 				</div>
 
@@ -61,7 +67,7 @@
 						Chamber Name:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="chamber_name" id="chamber_name" value="{{$doctor->chamber_name}}" required>
+						<input type="text" class="form-control m-input" name="chamber_name" id="chamber_name" value="{{$doctor->chamber_name}}" >
 					</div>
 				</div>
 
@@ -70,7 +76,7 @@
 						Chamber Address:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="chamber_address" id="chamber_address" value="{{$doctor->chamber_address}}" required>
+						<input type="text" class="form-control m-input" name="chamber_address" id="chamber_address" value="{{$doctor->chamber_address}}" >
 					</div>
 				</div>
 
@@ -79,7 +85,7 @@
 						Education:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="education" id="education" value="{{$doctor->education}}" required>
+						<input type="text" class="form-control m-input" name="education" id="education" value="{{$doctor->education}}" >
 					</div>
 				</div>
 
@@ -88,7 +94,7 @@
 						BMDC Reg No:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="bmdc_number" id="bmdc_number" value="{{$doctor->bmdc_number}}" required>
+						<input type="text" class="form-control m-input" name="bmdc_number" id="bmdc_number" value="{{$doctor->bmdc_number}}" >
 					</div>
 				</div>
 				
@@ -97,7 +103,7 @@
 						Phone Number:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="phone_number" id="phone_number" value="{{$user->phone_number}}" required>
+						<input type="text" class="form-control m-input" name="phone_number" id="phone_number" value="{{$user->phone_number}}" >
 					</div>
 				</div>
 
@@ -107,7 +113,16 @@
 						Online Consultation:
 					</label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control m-input" name="online_consultation" id="online_consultation" value="{{$doctor->online_consultation}}" required>
+						<input type="text" class="form-control m-input" name="online_consultation" id="online_consultation" value="{{$doctor->online_consultation}}" >
+					</div>
+				</div>
+				
+				<div class="form-group m-form__group row">
+					<label class="col-lg-2 col-form-label">
+						Long - lat:
+					</label>
+					<div class="col-lg-6">
+						<input type="text" class="form-control m-input" name="location" id="location" value="{{$doctor->location}}">
 					</div>
 				</div>
 			
@@ -118,7 +133,7 @@
 					</label>
 					<div class="col-lg-6">
 						@if($doctor->imagelink!=null || $doctor->imagelink!='')
-						<img src="http://localhost/ubl_laravel/{{$doctor->imagelink}}" style="max-height: 200px;" id="previewImage">
+						<img src="https://ubl.sensetiveexpert.com/ubl_laravel/public/images/doctor/{{$doctor->bmdc_number}}.jpg" style="max-height: 200px;" id="previewImage">
 						<br>
 						@endif
 						<input type="file" class="form-control m-input" name="photo_link" id="photo_link" onchange="previewFile();">

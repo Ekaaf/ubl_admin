@@ -12,7 +12,12 @@
 					Doctors List
 				</h3>
 			</div>
-      
+      <!-- <button class="btn btn-success">
+        Export
+      </button> -->
+      <a href="{{URL::to('admin/doctor/excel')}}" class="btn btn-success" id="addUniqueID" style="background: #843e71;border: #2B2A97;">
+                    Download Excel
+                  </a>
 		</div>
 	</div>
 	<!-- END: Subheader -->

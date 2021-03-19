@@ -57,17 +57,17 @@ License: You must have a valid license purchased only from themeforest(the above
 					<div class="m-login__container">
 						<div class="m-login__logo mb-3">
 							<a href="#">
-								<!-- <img src="{{URL::to('public/logo.png')}}" style="height: 100px;width: 100px;"> -->
+								<img src="https://bdsdentist.com/assets/img/logo.png" class="img-fluid">
 							</a>
-							<div data-v-98d41700="" class="row justify-content-center">
+							<!-- <div data-v-98d41700="" class="row justify-content-center">
 								<div class="mt-2" style="background-color: #843e71; color: white; width: 40%; text-align: center; padding: 1%;">
 									UBL
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<div class="m-login__signin p-5">
 							<div class="m-login__head">
-								<h3 class="m-login__title" style="color: white;">
+								<h3 class="m-login__title" style="color: white;background: #5B0E2B !important;padding: 3%;">
 									Sign In
 								</h3>
 							</div>
@@ -94,7 +94,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div> -->
 								</div>
 								<div class="m-login__form-action">
-									<button class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary" style="background: #2B2A97;">
+									<button class="btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air m-login__btn m-login__btn--primary" style="background: #5B0E2B;border: none !important;">
 										Sign In
 									</button>
 								</div>

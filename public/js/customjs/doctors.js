@@ -53,9 +53,9 @@ function getDoctors(){
             { "data": "bmdc_number" },
             { "data": "phone_number" },
             { "data": "online_consultation" },
-            { "data": "imagelink",
+            { "data": "bmdc_number",
               "render": function ( data, type, full, meta ) {
-                return "<img src='"+data+"' class=''img-fluid'>";
+                return "<img src='https://ubl.sensetiveexpert.com/ubl_laravel/public/images/doctor/"+data+".jpg' width='150px' height='150px' onerror='imgError(this);'>";
               }
             },
             { "data": "id",
@@ -72,6 +72,11 @@ function getDoctors(){
 
 }
 
+function imgError(image) {
+    image.onerror = "";
+    image.src = "https://ubl.sensetiveexpert.com/ubl_laravel/public/images/default.jpg";
+    return true;
+}
 
 
 function deleteDoctors(id){

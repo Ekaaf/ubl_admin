@@ -22,33 +22,21 @@
 					</a>
 				</li>
 
-				<li class="m-menu__item parent-menu parent-menu" aria-haspopup="true">
-					<a href="{{URL::to('admin/dailyvisitdashboard')}}" class="m-menu__link ">
+				
+
+				<li class="m-menu__item parent-menu <?php if(Request::path()=='admin/import') echo "customselect"; ?>" aria-haspopup="true">
+					<a href="{{URL::to('admin/import')}}" class="m-menu__link ">
 						<i class="m-menu__link-icon flaticon-line-graph color-white"></i>
 						<span class="m-menu__link-title">
 							<span class="m-menu__link-wrap">
 								<span class="m-menu__link-text color-white">
-									Daily Visit Dashboard
+									Import
 								</span>
 							</span>
 						</span>
 					</a>
 				</li>
-
-				<li class="m-menu__item parent-menu parent-menu" aria-haspopup="true">
-					<a href="{{URL::to('admin/storedashboard')}}" class="m-menu__link ">
-						<i class="m-menu__link-icon flaticon-line-graph color-white"></i>
-						<span class="m-menu__link-title">
-							<span class="m-menu__link-wrap">
-								<span class="m-menu__link-text color-white">
-									Drug Store Dashboard
-								</span>
-							</span>
-						</span>
-					</a>
-				</li>
-
-
+				<!-- 
 				<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
 					<a  href="javascript:;" class="m-menu__link m-menu__toggle">
 						<i class="m-menu__link-icon flaticon-layers color-white"></i>
@@ -60,13 +48,6 @@
 					<div class="m-menu__submenu ">
 						<span class="m-menu__arrow"></span>
 						<ul class="m-menu__subnav">
-							<!-- <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
-								<span class="m-menu__link">
-									<span class="m-menu__link-text">
-										Manage users
-									</span>
-								</span>
-							</li> -->
 							<li class="m-menu__item child-menu" aria-haspopup="true" >
 								<a  href="{{URL::to('admin/doctor/add')}}" class="m-menu__link ">
 									<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
@@ -90,8 +71,7 @@
 							</li>
 						</ul>
 					</div>
-				</li>
-
+				</li>-->
 
 				<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
 					<a  href="javascript:;" class="m-menu__link m-menu__toggle">
@@ -136,99 +116,107 @@
 					</div>
 				</li>
 
-				<li class="m-menu__item parent-menu <?php if(Request::path()=='admin/dailyvisit') echo "customselect"; ?>" aria-haspopup="true">
-					<a href="{{URL::to('admin/dailyvisit')}}" class="m-menu__link ">
-						<i class="m-menu__link-icon flaticon-line-graph color-white"></i>
-						<span class="m-menu__link-title">
-							<span class="m-menu__link-wrap">
-								<span class="m-menu__link-text color-white">
-									Daily Visit
-								</span>
-							</span>
+					<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
+						<a  href="javascript:;" class="m-menu__link m-menu__toggle">
+							<i class="m-menu__link-icon flaticon-layers color-white"></i>
+							<span class="m-menu__link-text color-white">
+							Camp Registrations
 						</span>
-					</a>
-				</li>
+							<i class="m-menu__ver-arrow la la-angle-right color-white"></i>
+						</a>
+						<div class="m-menu__submenu ">
+							<span class="m-menu__arrow"></span>
+							<ul class="m-menu__subnav">
+								<li class="m-menu__item child-menu" aria-haspopup="true" >
+									<a  href="{{URL::to('admin/regdentalcamp')}}" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text color-white">
+										All Registrations
+									</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</li>
 
-				<li class="m-menu__item parent-menu <?php if(Request::path()=='admin/store') echo "customselect"; ?>" aria-haspopup="true">
-					<a href="{{URL::to('admin/store')}}" class="m-menu__link ">
-						<i class="m-menu__link-icon flaticon-line-graph color-white"></i>
-						<span class="m-menu__link-title">
-							<span class="m-menu__link-wrap">
-								<span class="m-menu__link-text color-white">
-									Drug Store
-								</span>
-							</span>
+					<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
+						<a  href="javascript:;" class="m-menu__link m-menu__toggle">
+							<i class="m-menu__link-icon flaticon-layers color-white"></i>
+							<span class="m-menu__link-text color-white">
+							Manage Users
 						</span>
-					</a>
-				</li>
+							<i class="m-menu__ver-arrow la la-angle-right color-white"></i>
+						</a>
+						<div class="m-menu__submenu ">
+							<span class="m-menu__arrow"></span>
+							<ul class="m-menu__subnav">
+								<li class="m-menu__item child-menu" aria-haspopup="true" >
+									<a  href="{{URL::to('admin/users')}}" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text color-white">
+										All Users
+									</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</li>
 
-				<li class="m-menu__item parent-menu <?php if(Request::path()=='admin/audit') echo "customselect"; ?>" aria-haspopup="true">
-					<a href="{{URL::to('admin/audit')}}" class="m-menu__link ">
-						<i class="m-menu__link-icon flaticon-line-graph color-white"></i>
-						<span class="m-menu__link-title">
-							<span class="m-menu__link-wrap">
-								<span class="m-menu__link-text color-white">
-									Audit
-								</span>
-							</span>
+					<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
+						<a  href="javascript:;" class="m-menu__link m-menu__toggle">
+							<i class="m-menu__link-icon flaticon-layers color-white"></i>
+							<span class="m-menu__link-text color-white">
+							Sample Collection
 						</span>
-					</a>
-				</li>
+							<i class="m-menu__ver-arrow la la-angle-right color-white"></i>
+						</a>
+						<div class="m-menu__submenu ">
+							<span class="m-menu__arrow"></span>
+							<ul class="m-menu__subnav">
+								<li class="m-menu__item child-menu" aria-haspopup="true" >
+									<a  href="{{URL::to('admin/samplecollection')}}" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text color-white">
+										All Applications
+									</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</li>
 
-
-				<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
-					<a  href="javascript:;" class="m-menu__link m-menu__toggle">
-						<i class="m-menu__link-icon flaticon-layers color-white"></i>
-						<span class="m-menu__link-text color-white">
-							Options
+					<li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"  m-menu-submenu-toggle="hover">
+						<a  href="javascript:;" class="m-menu__link m-menu__toggle">
+							<i class="m-menu__link-icon flaticon-layers color-white"></i>
+							<span class="m-menu__link-text color-white">
+							Manage Search
 						</span>
-						<i class="m-menu__ver-arrow la la-angle-right color-white"></i>
-					</a>
-					<div class="m-menu__submenu ">
-						<span class="m-menu__arrow"></span>
-						<ul class="m-menu__subnav">
-							<!-- <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true" >
-								<span class="m-menu__link">
-									<span class="m-menu__link-text">
-										Manage users
+							<i class="m-menu__ver-arrow la la-angle-right color-white"></i>
+						</a>
+						<div class="m-menu__submenu ">
+							<span class="m-menu__arrow"></span>
+							<ul class="m-menu__subnav">
+								<li class="m-menu__item child-menu" aria-haspopup="true" >
+									<a  href="{{URL::to('admin/search')}}" class="m-menu__link ">
+										<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
+											<span></span>
+										</i>
+										<span class="m-menu__link-text color-white">
+										Searches
 									</span>
-								</span>
-							</li> -->
-							<li class="m-menu__item child-menu" aria-haspopup="true" >
-								<a  href="{{URL::to('admin/options/add')}}" class="m-menu__link ">
-									<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
-										<span></span>
-									</i>
-									<span class="m-menu__link-text color-white">
-										Add option
-									</span>
-								</a>
-							</li>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</li>
 
-							<li class="m-menu__item child-menu" aria-haspopup="true" >
-								<a  href="{{URL::to('admin/options')}}" class="m-menu__link ">
-									<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
-										<span></span>
-									</i>
-									<span class="m-menu__link-text color-white">
-										All Options
-									</span>
-								</a>
-							</li>
-
-							<li class="m-menu__item child-menu" aria-haspopup="true" >
-								<a  href="{{URL::to('admin/doctors')}}" class="m-menu__link ">
-									<i class="m-menu__link-bullet m-menu__link-bullet--dot color-white">
-										<span></span>
-									</i>
-									<span class="m-menu__link-text color-white">
-										Doctors
-									</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</li>
+				
 				@endif
 
 

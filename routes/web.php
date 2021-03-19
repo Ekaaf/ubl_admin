@@ -21,7 +21,10 @@ Route::post('/postlogin', 'AdminController@postlogin')->name('postlogin');
 Route::get('/logout', 'AdminController@logout')->name('logout');
 
 Route::group(array('prefix' => 'admin','middleware' => 'admin'), function()
-{
+{	
+	Route::get('/import', array('as' => 'import', 'uses' => 'AdminController@import'));
+	Route::post('/saveImport', array('as' => 'saveImport', 'uses' => 'AdminController@saveImport'));
+	Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'AdminController@dashboard'));
 	Route::get('/dashboard', array('as' => 'dashboard', 'uses' => 'AdminController@dashboard'));
 	Route::get('/store', array('as' => 'dashboard', 'uses' => 'AdminController@store'));
 	Route::post('/store/updatestore', array('as' => 'updatestore', 'uses' => 'AdminController@updatestore'));
@@ -78,6 +81,32 @@ Route::group(array('prefix' => 'admin','middleware' => 'admin'), function()
 	Route::get('/storedashboard', array('as' => 'storedashboard', 'uses' => 'AdminController@storedashboard'));
 	Route::get('/dailyvisitdashboard', array('as' => 'dailyvisitdashboard', 'uses' => 'AdminController@dailyvisitdashboard'));
 	Route::get('/storedashboard', array('as' => 'storedashboard', 'uses' => 'AdminController@storedashboard'));
+
+	Route::get('/regdentalcamp',array('as' => 'users', 'uses' => 'AdminController@regdentalcamp'));
+	Route::get('/showRegDentalCamp',array('as' => 'users', 'uses' => 'AdminController@showRegDentalCamp'));
+	Route::get('/editdentalcamp/{id}',array('as' => 'users', 'uses' => 'AdminController@editDentalCamp'));
+	Route::post('/dentalcampeditprocess/{id}',array('as'=>'users', 'uses'=>'AdminController@dentalcampeditprocess'));
+	Route::get('/deletedentalcamp/{id}', array('as' => 'deleteuser', 'uses' => 'AdminController@deleteDentalCamp'));
+
+
+    Route::get('/users',array('as' => 'users', 'uses' => 'AdminController@users'));
+    Route::get('/showusers',array('as' => 'users', 'uses' => 'AdminController@showusers'));
+    Route::get('/editusers/{id}',array('as' => 'users', 'uses' => 'AdminController@editusers'));
+    Route::post('/usereditprocess/{id}',array('as'=>'users', 'uses'=>'AdminController@usereditprocess'));
+    Route::get('/deleteuser/{id}', array('as' => 'deleteuser', 'uses' => 'AdminController@deleteuser'));
+
+    Route::get('/samplecollection',array('as' => 'users', 'uses' => 'AdminController@samplecollection'));
+    Route::get('/showsamplecollection',array('as' => 'users', 'uses' => 'AdminController@showsamplecollection'));
+  //  Route::get('/editusers/{id}',array('as' => 'users', 'uses' => 'AdminController@editusers'));
+  //  Route::post('/usereditprocess/{id}',array('as'=>'users', 'uses'=>'AdminController@usereditprocess'));
+    Route::get('/deleteuser/{id}', array('as' => 'deleteuser', 'uses' => 'AdminController@deleteuser'));
+
+    Route::get('/search',array('as' => 'users', 'uses' => 'AdminController@search'));
+    Route::get('/showsearch',array('as' => 'users', 'uses' => 'AdminController@showsearch'));
+
+
+
+
 });
 
 

@@ -30,7 +30,76 @@ class AdminController extends Controller
 {
 
     public function dashboard(Request $request){
-        return view('index');
+        $counter = DB::table('counter')->get();
+        $doctors = DB::table('doctors')->count();
+        $sampleno = DB::table('apply_dental')->count();
+        // dd($counter);
+        return view('index')->with('counter',$counter)->with('doctors',$doctors)->with('sampleno',$sampleno);
+    }
+
+    public function import(Request $request){
+        return view('import');
+    }
+
+    public function saveImport(Request $request){
+        $result = DB::transaction(function() use ($request){
+            
+            $csvFile = $request->file('excel')->getRealPath();
+            $file = fopen($csvFile,"r");
+            $i=0;
+            while(! feof($file)){
+                $data = fgetcsv($file);
+                // print_r($data);
+                if($i!=0){
+                    $user = new user();
+                    $user->name = $data[1];
+                    $user->phone_number = "0".$data[10];
+                    $user->role_id = 2;
+                    $user->password = Hash::make('1234');
+                    $user->save();
+
+                    $doctor = new Doctor();
+                    $doctor->user_id = $user->id;
+                    $doctor->doctor_name = $data[1];
+                    $doctor->designation = $data[2];
+                    $doctor->department = $data[3];
+                    $doctor->specialization = $data[4];
+                    $doctor->chamber_name = $data[5];
+                    $doctor->chamber_address = $data[6];
+
+                    if($data[7] && $data[7]!=""){
+                        $location = explode(",",$data[7]);
+                        if(count($location) == 2){
+                            $doctor->latitude = trim($location[0]);
+                            $doctor->longitude = trim($location[1]);
+                        }
+                        
+                    }
+                    
+
+                    $doctor->education = $data[8];
+                    $doctor->bmdc_number = $data[9];
+                    $doctor->imagelink = "public/images/doctor/".$data[9].".jpg";
+                    $doctor->online_consultation = $data[12];
+                    $doctor->save();
+                }
+                
+                // if($i>2){
+                //     break;
+                // }
+                $i++;
+            }
+            fclose($file);
+        });
+        // dd($result);
+        if($result){
+            // dd('success');
+        }
+        else{
+            // dd('fail');
+        }
+        return view('import');
+        
     }
 
     public function login(){
@@ -853,7 +922,7 @@ class AdminController extends Controller
         
         $table = "users";
 
-        $table = "(select users.id as id,users.name as name,users.email as email, users.type as type, territorries.name as territorry_name, zones.name as zone_name from users LEFT JOIN territorries ON users.territorry_id = territorries.id LEFT JOIN zones ON users.zone_id = zones.id) testtable";
+        $table = "(select users.id as id,users.name as name,users.email as email, users.type as type, territorries.name as territorry_name, zones.name as zone_name from users LEFT JOIN territorries ON users.territorry_id = territorries.id LEFT JOIN zones ON users.zone_id = zones.id where users.role_id = 3) testtable";
 
 
 
@@ -1136,6 +1205,7 @@ class AdminController extends Controller
     }
 
 
+
     public function getDoctors(Request $request){
 
         // $where = " WHERE 1=1 AND options.type='Dentist\'s Grade (Daily Visit)'";
@@ -1144,10 +1214,10 @@ class AdminController extends Controller
         // }
 
         $table = 
-            "(
-                SELECT doctors.*, users.phone_number as phone_number from doctors inner join users on doctors.user_id = users.id order by doctors.id desc
-            ) testtable";
-
+            "(SELECT doctors.*, users.phone_number as phone_number from doctors inner join users on doctors.user_id = users.id  where users.role_id = 2 order by doctors.id desc) testtable";
+        // $table = "(
+        //             SELECT * from doctors
+        //         ) aaaa";
         // dd($table);
         $primaryKey = 'id';
 
@@ -1210,22 +1280,22 @@ class AdminController extends Controller
         else{
             $sql_details = array(
 
-                'user' => 'dcptrack_unileve',
+                'user' => 'sensetiv',
 
-                'pass' => 'r5hEYz!rDVOH',
+                'pass' => '3Bk5Imo*0Y0)iD',
 
-                'db'   => 'dcptrack_unilever',
+                'db'   => 'sensetiv_ubl',
 
-                'host' => 'dcptracker.com'
+                'host' => 'ubl.sensetiveexpert.com'
 
             );
         }
         
 
         // require( 'public/Jquerydatatables/ssp.class.php' );
-        require( 'app/ssp.class.php' );
+        // require( 'app/ssp.class.php' );
         // echo json_encode(
-        // dd($type);
+        // dd(SSP::demo());
         $result =  SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns);
 
         $start=$_REQUEST['start']+1;
@@ -1347,7 +1417,7 @@ class AdminController extends Controller
     }
 
     public function doctoradd(Request $request){
-        $departments = [1,2,3,4,5,6];
+        $departments = ['PAEDIATRIC DENTISTRY','DEPARTMENT OF PROSTHODONTICS','ORAL ANATOMY & PHYSIOLOGY','CONSERVATIVE DENTISTRY & ENDODONTICS','ORAL AND MAXILLOFACIAL SURGERY','ORAL PATHOLOGY & PERIODONTOLOGY','ORTHODONTICS','DEPARTMENT  OF LIFE SCIENCE','PERIODENTOLOGY & ORAL PATHOLOGY','FACULTY OF DENTISTRY','DIAGNOSIS DEPARTMENT','GENERAL & DENTAL PHARMACOLOGY','DENTAL PUBLIC HEALTH','DENTAL DEPARTMENT','HEALTH','DENTAL ANATOMY','SCIENCE OF DENTAL MATERIALS'];
         return view('doctoradd')->with('departments',$departments);
     }
 
@@ -1371,7 +1441,7 @@ class AdminController extends Controller
 
         $doctor = new Doctor();
         $doctor->user_id = $user->id;
-        $doctor->doctor_name = $request->input('doctor_name');
+        $doctor->doctor_name = $request->input('name');
         $doctor->designation = $request->input('designation');
         $doctor->department = $request->input('department');
         $doctor->specialization = $request->input('specialization');
@@ -1379,9 +1449,15 @@ class AdminController extends Controller
         $doctor->chamber_name = $request->input('chamber_name');
         $doctor->chamber_address = $request->input('chamber_address');
         $doctor->education = $request->input('education');
-        $doctor->location = $request->input('location');
-        $doctor->imagelink = $imageUrl;
-
+        if($request->input('location')){
+            $doctor->location = $request->input('location');
+            $location = explode(",",$request->input('location'));
+            $doctor->latitude = $location[0];
+            $doctor->longitude = $location[1];
+        }
+        if($request->file()){
+            $doctor->imagelink = $imageUrl;
+        }
         $doctor->online_consultation = $request->input('online_consultation');
         $doctor->save();
         return redirect('admin/doctor/index');
@@ -1391,7 +1467,9 @@ class AdminController extends Controller
         $doctor = Doctor::where('id',$id)->first();
         $user = User::where('id',$doctor['user_id'])->first();
         // dd($doctor);
-        return view('doctorsedit')->with('doctor',$doctor)->with('user',$user);
+
+        $departments = ['PAEDIATRIC DENTISTRY','DEPARTMENT OF PROSTHODONTICS','ORAL ANATOMY & PHYSIOLOGY','CONSERVATIVE DENTISTRY & ENDODONTICS','ORAL AND MAXILLOFACIAL SURGERY','ORAL PATHOLOGY & PERIODONTOLOGY','ORTHODONTICS','DEPARTMENT  OF LIFE SCIENCE','PERIODENTOLOGY & ORAL PATHOLOGY','FACULTY OF DENTISTRY','DIAGNOSIS DEPARTMENT','GENERAL & DENTAL PHARMACOLOGY','DENTAL PUBLIC HEALTH','DENTAL DEPARTMENT','HEALTH','DENTAL ANATOMY','SCIENCE OF DENTAL MATERIALS'];
+        return view('doctorsedit')->with('doctor',$doctor)->with('user',$user)->with('departments',$departments);
     }
     
 
@@ -1404,9 +1482,16 @@ class AdminController extends Controller
 
         if($request->file()){
             $file = $request->file('photo_link');
-            $file->move('../ubl_laravel/public/images/doctor/',$file->getClientOriginalName());
-            $imageUrl = "http://localhost/ubl_laravel/public/images/doctor/".$file->getClientOriginalName();
+            $file->move('../ubl_laravel/public/images/doctor/',$data['bmdc_number']);
+            $imageUrl = "/public/images/doctor/".$data['bmdc_number'];
             $data['imagelink'] = $imageUrl;
+        }
+
+        if($request->input('location')){
+            $data['location'] = $request->input('location');
+            $location = explode(",",$request->input('location'));
+            $data['latitude'] = $location[0];
+            $data['longitude'] = $location[1];
         }
         DB::table('doctors')
             ->where('id', $data['id'])
@@ -1421,7 +1506,9 @@ class AdminController extends Controller
 
 
     public function deletedoctor($id){
+        $doctordata = Doctor::where('id',$id)->first();
         $doctor = Doctor::where('id',$id)->delete();
+        $user = User::where('id',$doctordata['user_id'])->delete();
     }
 
     public function deletedailyvisit($id){
@@ -1429,6 +1516,51 @@ class AdminController extends Controller
     }
     
 
+    public function excel(){
+        $query = "SELECT * FROM `users` INNER join doctors on users.id = doctors.user_id";
+        $doctors = DB::select($query);
+        //define headers for CSV 
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=doctor.csv');
+        //write data into CSV
+        $fp = fopen('php://output', 'wb');
+
+        $headerTitle = array();
+        $headerTitle['name'] = "Name";
+        $headerTitle['email'] = "Email Address";
+        $headerTitle['phone'] = "Phone Number";
+        $headerTitle['designation'] = "Designation";
+        $headerTitle['department'] = "Department";
+        $headerTitle['specialization'] = "Specialization";
+        $headerTitle['chamber_name'] = "Chamber Name";
+        $headerTitle['chamber_address'] = "Chamber Address";
+        $headerTitle['education'] = "Education";
+        $headerTitle['bmdc_number'] = "Bmdc Number";
+        $headerTitle['location'] = "Location";
+        fputcsv($fp, $headerTitle);
+
+        foreach ($doctors as $doctor) {
+            $res = array();
+            $res['name'] = $doctor->name;
+            $res['email'] = $doctor->email;
+            $res['phone'] = $doctor->phone_number;
+            $res['designation'] = $doctor->designation;
+            $res['department'] = $doctor->department;
+            $res['specialization'] = $doctor->specialization;
+            $res['chamber_name'] = $doctor->chamber_name;
+            $res['chamber_address'] = $doctor->chamber_address;
+            $res['education'] = $doctor->education;
+            $res['bmdc_number'] = $doctor->bmdc_number;
+            $res['location'] = $doctor->location;
+
+
+            fputcsv($fp, $res);
+            unset($res);
+        }
+        fclose($fp);
+        exit();
+    
+    }   
     public function dailyvisitdashboard(){
         $month = date('m');
         $year = date('Y');
@@ -1550,4 +1682,281 @@ class AdminController extends Controller
                                           ->with('withinCoverageLabel',$withinCoverageLabel)->with('withinCoverageData',$withinCoverageData)
                                           ->with('availabilityLabel',$availabilityLabel)->with('availabilityData',$availabilityData);
     }
+
+    public function regdentalcamp(){
+        return view('regdentalcamp');
+    }
+    public function showRegDentalCamp(){
+
+
+        $table ="reg_dental_camp";
+        $primaryKey = 'id';
+        $userColumns = array(
+            array( 'db' => 'id',  'dt' => 'id' ),
+            array( 'db' => 'reg_name', 'dt' => 'reg_name' ),
+            array( 'db' => 'reg_email', 'dt' => 'reg_email' ),
+            array( 'db' => 'reg_phone', 'dt' => 'reg_phone' ),
+            array( 'db' => 'reg_type', 'dt' => 'reg_type' ),
+            array( 'db' => 'reg_info', 'dt' => 'reg_info' )
+        );
+        if($_SERVER['HTTP_HOST']=='localhost'){
+            $sql_details = array(
+                'user' => 'root',
+                'pass' => '',
+                'db'   => 'ubl',
+                'host' => 'localhost'
+            );
+        }
+        else{
+            $sql_details = array(
+                'user' => 'sensetiv',
+                'pass' => '3Bk5Imo*0Y0)iD',
+                'db'   => 'sensetiv_ubl',
+                'host' => 'ubl.sensetiveexpert.com'
+            );
+        }
+
+        $userResult =  SSP::simple( $_GET, $sql_details, $table, $primaryKey, $userColumns);
+        $start=$_REQUEST['start']+1;
+        $idx=0;
+        foreach($userResult['data'] as &$res){
+            $res[0]=(string)$start;
+            $start++;
+            $idx++;
+        }
+        echo json_encode($userResult);
+
+    }
+    public function editDentalCamp($id){
+       $getUserData =  DB::table('reg_dental_camp')->WHERE('id',$id)->first();
+       
+       return view('regdentalcampedit', compact('getUserData'));
+    }
+
+    public function dentalcampeditprocess(Request $request, $id){
+            $data = array();
+            $data['reg_name'] = $request->reg_name;
+            $data['reg_email'] = $request->reg_email;
+            $data['reg_phone'] = $request->reg_phone;
+            $data['reg_type'] = $request->reg_type;
+            $data['reg_info'] = $request->reg_info;
+            
+            $update = DB::table('reg_dental_camp')->where('id',$id)->update($data);
+            if($update){
+                return Redirect('/admin/editdentalcamp/'.$id);
+            }
+            else {
+                return Redirect('/admin/editdentalcamp/'.$id);
+            }
+            
+    }
+    public function deleteDentalCamp($id){
+        $delete = DB::table('reg_dental_camp')->WHERE('id',$id)->delete();
+
+        return Redirect('/admin/regdentalcamp');
+    }
+
+
+    public function users(){
+        return view('users');
+    }
+    public function showusers(){
+
+
+        $table ="users";
+        $primaryKey = 'id';
+        $userColumns = array(
+            array( 'db' => 'id',  'dt' => 'id' ),
+            array( 'db' => 'name', 'dt' => 'name' ),
+            array( 'db' => 'email', 'dt' => 'email' ),
+            array( 'db' => 'phone_number', 'dt' => 'phone_number' ),
+        //    array( 'db' => 'email_verified_at', 'dt' => 'email_verified_at' ),
+            array( 'db' => 'role_id', 'dt' => 'role_id' )
+        );
+        if($_SERVER['HTTP_HOST']=='localhost'){
+            $sql_details = array(
+                'user' => 'root',
+                'pass' => '',
+                'db'   => 'ubl',
+                'host' => 'localhost'
+            );
+        }
+        else{
+            $sql_details = array(
+                'user' => 'sensetiv',
+                'pass' => '3Bk5Imo*0Y0)iD',
+                'db'   => 'sensetiv_ubl',
+                'host' => 'ubl.sensetiveexpert.com'
+            );
+        }
+
+        $userResult =  SSP::simple( $_GET, $sql_details, $table, $primaryKey, $userColumns);
+        $start=$_REQUEST['start']+1;
+        $idx=0;
+        foreach($userResult['data'] as &$res){
+            $res[0]=(string)$start;
+            $start++;
+            $idx++;
+        }
+        echo json_encode($userResult);
+
+    }
+    public function editusers($id){
+        $getUserData =  DB::table('users')->WHERE('id',$id)->first();
+
+        return view('editusers', compact('getUserData'));
+    }
+
+    public function usereditprocess(Request $request, $id){
+        $data = array();
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['phone_number'] = $request->phone_number;
+       // $data['email_verifed_at'] = $request->reg_type;
+        $data['role_id'] = $request->role_id;
+
+        $update = DB::table('users')->where('id',$id)->update($data);
+        if($update){
+            return Redirect('/admin/editusers/'.$id);
+        }
+        else {
+            return Redirect('/admin/editusers/'.$id);
+        }
+
+    }
+    public function deleteusers($id){
+        $delete = DB::table('users')->WHERE('id',$id)->delete();
+
+        return Redirect('/admin/users');
+    }
+
+
+    public function samplecollection(){
+        return view('samplecollection');
+    }
+    public function showsamplecollection(){
+        require( 'app/ssp.class.php' );
+
+        $table ="(
+    SELECT apply_dental.id as ID, users.name USERNAME, apply_dental.address ADDRESS, users.email EMAIL, users.phone_number PHONE_NUMBER
+FROM apply_dental
+INNER JOIN users ON apply_dental.user_id=users.id
+ ) as temp";
+        $primaryKey = 'ID';
+        $userColumns = array(
+            array( 'db' => 'ID',  'dt' => 'id' ),
+            array( 'db' => 'USERNAME', 'dt' => 'username' ),
+            array( 'db' => 'ADDRESS', 'dt' => 'address' ),
+            array( 'db' => 'PHONE_NUMBER', 'dt' => 'phone_number' ),
+            //    array( 'db' => 'email_verified_at', 'dt' => 'email_verified_at' ),
+            array( 'db' => 'EMAIL', 'dt' => 'email' )
+        );
+        if($_SERVER['HTTP_HOST']=='localhost'){
+            $sql_details = array(
+                'user' => 'root',
+                'pass' => '',
+                'db'   => 'ubl',
+                'host' => 'localhost'
+            );
+        }
+        else{
+            $sql_details = array(
+                'user' => 'sensetiv',
+                'pass' => '3Bk5Imo*0Y0)iD',
+                'db'   => 'sensetiv_ubl',
+                'host' => 'ubl.sensetiveexpert.com'
+            );
+        }
+
+        $userResult =  SSP::simple( $_GET, $sql_details, $table, $primaryKey, $userColumns);
+        $start=$_REQUEST['start']+1;
+        $idx=0;
+        foreach($userResult['data'] as &$res){
+            $res[0]=(string)$start;
+            $start++;
+            $idx++;
+        }
+
+        echo json_encode($userResult);
+
+    }
+
+
+    public function search(){
+        return view('search');
+    }
+    public function showsearch(){
+
+
+        $table ="search";
+        $primaryKey = 'id';
+        $userColumns = array(
+            array( 'db' => 'id',  'dt' => 'id' ),
+            array( 'db' => 'location', 'dt' => 'location' ),
+            array( 'db' => 'name', 'dt' => 'name' ),
+            array( 'db' => 'chamber_name', 'dt' => 'chamber_name' ),
+            array( 'db' => 'department', 'dt' => 'department' ),
+            array( 'db' => 'latitude', 'dt' => 'latitude' ),
+             array( 'db' => 'longitude', 'dt' => 'longitude' )
+        );
+        if($_SERVER['HTTP_HOST']=='localhost'){
+            $sql_details = array(
+                'user' => 'root',
+                'pass' => '',
+                'db'   => 'ubl',
+                'host' => 'localhost'
+            );
+        }
+        else{
+            $sql_details = array(
+                'user' => 'sensetiv',
+                'pass' => '3Bk5Imo*0Y0)iD',
+                'db'   => 'sensetiv_ubl',
+                'host' => 'ubl.sensetiveexpert.com'
+            );
+        }
+
+        $userResult =  SSP::simple( $_GET, $sql_details, $table, $primaryKey, $userColumns);
+        $start=$_REQUEST['start']+1;
+        $idx=0;
+        foreach($userResult['data'] as &$res){
+            $res[0]=(string)$start;
+            $start++;
+            $idx++;
+        }
+        echo json_encode($userResult);
+
+    }
+
+    /*
+    public function editusers($id){
+        $getUserData =  DB::table('users')->WHERE('id',$id)->first();
+
+        return view('editusers', compact('getUserData'));
+    }
+
+    public function usereditprocess(Request $request, $id){
+        $data = array();
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['phone_number'] = $request->phone_number;
+        // $data['email_verifed_at'] = $request->reg_type;
+        $data['role_id'] = $request->role_id;
+
+        $update = DB::table('users')->where('id',$id)->update($data);
+        if($update){
+            return Redirect('/admin/editusers/'.$id);
+        }
+        else {
+            return Redirect('/admin/editusers/'.$id);
+        }
+
+    }
+
+    public function deleteusers($id){
+        $delete = DB::table('users')->WHERE('id',$id)->delete();
+
+        return Redirect('/admin/users');
+    }
+    */
 }
